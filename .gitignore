@@ -1,0 +1,13 @@
+# Local editor state, temporary files and credential material
+.obsidian/
+.grimoire/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.tmp
+*.bak
+.env
+.env.*
+!.env.example
+*.pem
+*.key
