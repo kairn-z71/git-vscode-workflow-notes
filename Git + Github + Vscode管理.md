@@ -2576,16 +2576,16 @@ git ls-files -- ".env"
 
 学习阶梯：**L1 · 先分清到底上传了哪个目录**
 
-| 项目 | 本次实际结果 | 大白话 |
-| --- | --- | --- |
-| TA 父仓库 | 根目录已有 `.git`；当前分支 `ai-polished`，远程仍为 `https://github.com/kairn-z71/TA.git` | 原来的整库版本管理保留，不挪走、不重建 |
-| 独立子仓库 | 在 `游戏开发 & 工作/杂项/代码管理/.git/` 新建 | 是的，这次在「代码管理」里又建了一个独立 `.git` |
-| 新远程仓库 | [kairn-z71/git-vscode-workflow-notes](https://github.com/kairn-z71/git-vscode-workflow-notes) | 专门存这份 Git / GitHub / VS Code 学习资料 |
-| 可见性 | **Private（私有）** | 用户未指定公开时，先避免把个人笔记直接公开 |
-| 子仓库默认分支 | `main`；关联 `origin/main` | 这是子仓库自己的 main，与 TA 的分支不是同一套引用 |
-| 上传内容 | 主笔记 1 篇、`Pictures/` 中图片 28 张、新增 `README.md` 和 `.gitignore`，共 **31 个文件** | 只发这个文件夹当前的内容，不带整套 TA |
-| 首次提交 | [`4335697c2b81a6f8219d8cd1fd9e39ad3f58696f`](https://github.com/kairn-z71/git-vscode-workflow-notes/commit/4335697c2b81a6f8219d8cd1fd9e39ad3f58696f) | 一个新的根提交，不继承 TA 的旧提交历史 |
-| 未上传内容 | TA 其他笔记、TA 的 `.git/`、`.obsidian/`、`.grimoire/` 等 | 没有把整个 TA 打包，也没有复制父仓库的管理数据 |
+| 项目      | 本次实际结果                                                                                                                                               | 大白话                               |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| TA 父仓库  | 根目录已有 `.git`；当前分支 `ai-polished`，远程仍为 `https://github.com/kairn-z71/TA.git`                                                                           | 原来的整库版本管理保留，不挪走、不重建               |
+| 独立子仓库   | 在 `游戏开发 & 工作/杂项/代码管理/.git/` 新建                                                                                                                       | 是的，这次在「代码管理」里又建了一个独立 `.git`       |
+| 新远程仓库   | [kairn-z71/git-vscode-workflow-notes](https://github.com/kairn-z71/git-vscode-workflow-notes)                                                        | 专门存这份 Git / GitHub / VS Code 学习资料 |
+| 可见性     | **Private（私有）**                                                                                                                                      | 用户未指定公开时，先避免把个人笔记直接公开             |
+| 子仓库默认分支 | `main`；关联 `origin/main`                                                                                                                              | 这是子仓库自己的 main，与 TA 的分支不是同一套引用     |
+| 上传内容    | 主笔记 1 篇、`Pictures/` 中图片 28 张、新增 `README.md` 和 `.gitignore`，共 **31 个文件**                                                                              | 只发这个文件夹当前的内容，不带整套 TA              |
+| 首次提交    | [`4335697c2b81a6f8219d8cd1fd9e39ad3f58696f`](https://github.com/kairn-z71/git-vscode-workflow-notes/commit/4335697c2b81a6f8219d8cd1fd9e39ad3f58696f) | 一个新的根提交，不继承 TA 的旧提交历史             |
+| 未上传内容   | TA 其他笔记、TA 的 `.git/`、`.obsidian/`、`.grimoire/` 等                                                                                                     | 没有把整个 TA 打包，也没有复制父仓库的管理数据         |
 
 概念对应：[[#2.4 .git：本地仓库的管理数据|.git]]、[[#2.5 .gitignore：忽略规则文件|.gitignore]]、[[#2.3 仓库、分支与远程名词|仓库、origin 与分支]]。
 
