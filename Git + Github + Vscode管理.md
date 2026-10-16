@@ -22,6 +22,7 @@
 > **阅读导航**
 >
 > [[#1. 官方教程|1 教程]] · [[#2. 核心名词，不懂的概念看这里|2 核心名词]] · [[#3. VS Code 图标与菜单速查|3 VS Code 图标]] · [[#4. GitHub 网页图标与菜单速查|4 GitHub 界面]] · [[#5. 首次配置与创建仓库：先用 VS Code|5 首次配置]] · [[#6. VS Code 日常操作流程|6 图形日常流程]] · [[#7. GitLens 插件（可选）|7 GitLens]] · [[#8. 日常命令行与 PowerShell 实录|8 日常命令行]] · [[#9. 团队协作：先界面，后命令|9 团队协作]] · [[#10. 忽略规则与安全边界|10 忽略与安全]] · [[#11. 检查清单与双方法验收|11 验收]]
+> [[#12. 实操记录：只把「代码管理」目录发布到 GitHub|12 本次真实发布记录]]
 
 ## 1. 官方教程
 
@@ -2560,3 +2561,125 @@ git ls-files -- ".env"
 >
 > 操作前看 Status 和 [[#2.1 基础动作：Save、Stage、Commit、Push、Pull 与 Diff|Diff]]；协作前确认目标与规则；改写前留住旧提交；出错时先保存现场再诊断。
 > UI 可以提高效率，命令行提供可解释、可复现的精确操作。能把两者结合，并在异常情况下安全收场，才比“记住几十条命令”更接近能独立工作的水平。
+
+## 12. 实操记录：只把「代码管理」目录发布到 GitHub
+
+学习阶梯：**L2 · 日常熟练；认识父仓库与独立子仓库的边界**
+
+> [!important]
+> **本节是真实执行记录，不是前面的教学模拟**
+>
+> 执行日期：2026-10-16（Asia/Shanghai）。本次已真实创建 GitHub 仓库、初始化本目录、提交并完成首次推送；随后打开 Obsidian 定位到本笔记，再补记本节。前文各教学示例中的“没有实际执行”仅描述那些示例，不代表本节没有执行。
+> 本节记录完成后，还需要在子仓库中单独 Commit / Push 这次文档更新；具体提交哈希以仓库最新历史为准，避免把一个提交的哈希写进该提交自身。
+
+### 12.1 本次范围、结果与仓库地址
+
+学习阶梯：**L1 · 先分清到底上传了哪个目录**
+
+| 项目 | 本次实际结果 | 大白话 |
+| --- | --- | --- |
+| TA 父仓库 | 根目录已有 `.git`；当前分支 `ai-polished`，远程仍为 `https://github.com/kairn-z71/TA.git` | 原来的整库版本管理保留，不挪走、不重建 |
+| 独立子仓库 | 在 `游戏开发 & 工作/杂项/代码管理/.git/` 新建 | 是的，这次在「代码管理」里又建了一个独立 `.git` |
+| 新远程仓库 | [kairn-z71/git-vscode-workflow-notes](https://github.com/kairn-z71/git-vscode-workflow-notes) | 专门存这份 Git / GitHub / VS Code 学习资料 |
+| 可见性 | **Private（私有）** | 用户未指定公开时，先避免把个人笔记直接公开 |
+| 子仓库默认分支 | `main`；关联 `origin/main` | 这是子仓库自己的 main，与 TA 的分支不是同一套引用 |
+| 上传内容 | 主笔记 1 篇、`Pictures/` 中图片 28 张、新增 `README.md` 和 `.gitignore`，共 **31 个文件** | 只发这个文件夹当前的内容，不带整套 TA |
+| 首次提交 | [`4335697c2b81a6f8219d8cd1fd9e39ad3f58696f`](https://github.com/kairn-z71/git-vscode-workflow-notes/commit/4335697c2b81a6f8219d8cd1fd9e39ad3f58696f) | 一个新的根提交，不继承 TA 的旧提交历史 |
+| 未上传内容 | TA 其他笔记、TA 的 `.git/`、`.obsidian/`、`.grimoire/` 等 | 没有把整个 TA 打包，也没有复制父仓库的管理数据 |
+
+概念对应：[[#2.4 .git：本地仓库的管理数据|.git]]、[[#2.5 .gitignore：忽略规则文件|.gitignore]]、[[#2.3 仓库、分支与远程名词|仓库、origin 与分支]]。
+
+### 12.2 我实际做了哪些检查与准备？
+
+学习阶梯：**L2 · 先检查，再提交**
+
+1. 检查 TA 的仓库根目录、当前分支、远程、HEAD 与暂存区：确认它原本就是父仓库，且没有需要我代为提交的暂存内容。
+2. 检查「代码管理」：此前没有独立 `.git`，只有主笔记和 `Pictures/`，合计 29 个文件；检查文件均在目标目录内，没有通过符号链接把外部目录带进来。
+3. 核对笔记的图片嵌入能在这个目录内找到对应文件，确认 `Pictures/` 一并发布，而不是只上传 Markdown 留下缺图。
+4. 对文本检查常见 GitHub Token、私钥、云凭据等特征，没有发现匹配项。**这只是基础检查，不是绝对无敏感信息的保证**；截图也可能包含账户、路径等个人信息，所以默认私有。
+5. 发现当前没有安装 `gh`。本次没有为了发布而安装 GitHub CLI，而是复用 Git Credential Manager 中已有的 GitHub 登录凭据，核验登录账户为 `kairn-z71`。
+6. 检查新仓库名尚未占用，再通过 GitHub REST API 创建**空的私有仓库**，不自动生成远程 README，避免另起一套提交历史。认证秘密仅用于正常认证，没有写入笔记、README、仓库地址或 Git 配置。
+7. 在本目录新增 `README.md`：说明学习资料入口、图片目录、Obsidian 专用语法的阅读方式和父子仓库边界。
+8. 新增本目录自己的 `.gitignore`：忽略本地编辑器状态、临时文件和常见凭据文件。**没有改 TA 父仓库的忽略规则。**
+9. 初始化独立仓库，将提交姓名、邮箱按 TA 当前已有值写入**子仓库局部配置**，没有改全局身份；为子仓库单独设置 `origin`。
+10. 只暂存核对过的 31 个文件。首次空白检查出现 9 处已有 Markdown 空白格式告警；没有为消除这些告警而批量重写原笔记，复核范围后正常提交。
+
+### 12.3 两种发布方式：图形复现与本次实际命令
+
+学习阶梯：**L2 · 会用图标，也知道实际命令改了哪个仓库**
+
+**方法 A｜VS Code 图形复现（说明等价思路，不声称本次逐个点击过）**
+
+1. 在 VS Code 单独打开「代码管理」文件夹，先确认源代码管理当前选中的是这个目录，不是 TA 父仓库。
+2. 尚未初始化时选 Initialize Repository；补好 README 和 `.gitignore`。
+3. 查看 Changes，给本次目录里的文件点 `+`，检查 Staged Changes；不要提交 TA 的其他改动。
+4. 填说明 → Commit → Publish to GitHub，命名 `git-vscode-workflow-notes`，选择 Private。本次已经创建过了，**现在不要再次 Publish 创建第二个仓库**，后续直接 Push。
+5. 发布后到 GitHub 核对 `main` 的文件列表。按钮入口见 [[#3. VS Code 图标与菜单速查|VS Code 图标]] 和 [[#4. GitHub 网页图标与菜单速查|GitHub 网页]]。
+
+**方法 B｜本次实际执行的 Git 操作**
+
+下面从 TA 根目录指定子目录执行，避免把命令误作用到父仓库。记录供理解，**不要整段再次运行**。
+
+```powershell
+# 此命令已执行：在指定目录新建独立仓库，初始分支为 main
+git -C "游戏开发 & 工作/杂项/代码管理" init --initial-branch=main
+
+# 此前还将现有提交姓名、邮箱写入该子仓库的 --local 配置
+# 具体邮箱不在笔记重复列出；没有修改 --global 配置
+
+# GitHub 空仓库已经通过 API 创建；关联的是新仓库，不是 TA.git
+git -C "游戏开发 & 工作/杂项/代码管理" remote add origin https://github.com/kairn-z71/git-vscode-workflow-notes.git
+
+# 只暂存这几项；Pictures 中的图片均已核对
+git -C "游戏开发 & 工作/杂项/代码管理" add -- .gitignore README.md "Git + Github + Vscode管理.md" Pictures
+git -C "游戏开发 & 工作/杂项/代码管理" diff --cached --check
+
+# 已创建的首次根提交
+git -C "游戏开发 & 工作/杂项/代码管理" commit -m "docs: publish standalone Git and VS Code workflow notes"
+git -C "游戏开发 & 工作/杂项/代码管理" push --set-upstream origin main
+
+# 检查本地状态与远程 main
+git -C "游戏开发 & 工作/杂项/代码管理" status --porcelain
+git -C "游戏开发 & 工作/杂项/代码管理" ls-remote origin refs/heads/main
+```
+
+建远程仓库是 GitHub 平台操作，不是 `git init` 的附带效果。本次调用的是 `POST /user/repos`，关键参数为仓库名、`private: true`、`auto_init: false`；没有在命令行或本笔记中展示认证值。参考：[GitHub 建仓 API](https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user)、[Git Init](https://git-scm.com/docs/git-init)。
+
+### 12.4 上传后做了哪些核对，以及怎样记到 Obsidian？
+
+学习阶梯：**L2 · 不能只看到 Commit 成功就当作上传完成**
+
+- 首次 Push 后，本地 `main` 与远程 `refs/heads/main` 都指向上表的 `4335697…`，并已设置上游。
+- 通过 GitHub API 再次确认仓库为 Private、默认分支为 `main`，远程文件树有 31 个文件；未出现指向其他仓库的 gitlink，也没有上传 `.git/` 等管理目录。
+- 首次推送后，子仓库工作区干净。补写本节会再次产生一项笔记修改，需要再提交推送，不能认为“自动保存到磁盘”就已经同步到 GitHub。
+- 核对 TA 父仓库的 HEAD、分支、远程、Git 配置与暂存区索引未被改动；没有在父仓库 Commit / Push，没有将目录改成 Submodule，也没有执行父仓库的 `rm --cached`。
+- 按用户要求调用 Obsidian 的打开链接，定位到 TA 库的这篇笔记；实际检测到窗口标题为 `Git + Github + Vscode管理 - TA - Obsidian 1.14.4`。笔记内容由文件工具补写，由 Obsidian 读取显示，并不是假装手工点了编辑器。
+- 本节的同步方式是：补记实际结果 → 在**子仓库**提交文档更新 → Push → 再核对本地 HEAD 与远程 main。包含本节的最终提交可在 [仓库提交记录](https://github.com/kairn-z71/git-vscode-workflow-notes/commits/main) 中查看。
+
+### 12.5 以后只更新这个仓库，应该怎样做？
+
+学习阶梯：**L1–L2 · 最重要的是选对仓库**
+
+**方法 A｜VS Code 操作**
+
+单独打开「代码管理」目录，或在 Source Control Repositories 视图中明确选择它 → 修改并保存 → 检查 Diff → 选文件 `+` → Commit → Push。如果 VS Code 没自动发现嵌套仓库，单独打开这个目录即可，不要为了找到按钮就去重建 TA 的 `.git`。
+
+**方法 B｜在 TA 根目录用明确的 `-C` 指定子仓库**
+
+```powershell
+git -C "游戏开发 & 工作/杂项/代码管理" status
+git -C "游戏开发 & 工作/杂项/代码管理" diff
+
+# 只暂存当前任务；有新增图片时再按实际路径追加
+git -C "游戏开发 & 工作/杂项/代码管理" add -- "Git + Github + Vscode管理.md"
+git -C "游戏开发 & 工作/杂项/代码管理" diff --staged
+git -C "游戏开发 & 工作/杂项/代码管理" commit -m "docs: 更新代码管理笔记"
+git -C "游戏开发 & 工作/杂项/代码管理" push
+```
+
+> [!warning]
+> **嵌套仓库不是“自动从 TA 分家”**
+>
+> 父仓库之前已经跟踪的文件，可能仍同时被 TA 跟踪；对子目录创建新的 `.git`，或后来给父仓库加 `.gitignore`，都不会自动取消那些旧跟踪项。参考：[Git Ignore](https://git-scm.com/docs/gitignore)。
+> 本次只完成独立发布，**没有删除 GitHub 上原 TA 仓库的既有内容，也没有清理它的旧历史**。若以后还要求“TA 从此不再跟踪这个目录”，需要另行确认并在父仓库做专门迁移；不要误删任何一个 `.git`，也不要未经确认把嵌套目录暂存成 gitlink。
+> 新仓库默认私有。改为公开前还应检查截图中的个人信息及原有笔记内容；基础文本扫描不等于完整隐私审计。
